@@ -22,7 +22,7 @@ router.get("/by-location", async (req, res) => {
   }
 
   try {
-    const ads = await Ad.find({
+    const nearbyAds = await Ad.find({
       location: {
         $near: {
           $geometry: {
@@ -34,14 +34,21 @@ router.get("/by-location", async (req, res) => {
       }
     });
 
-    if (ads.length === 0) {
-      return res.status(404).json({ error: "No ads found near your location" });
+    if (nearbyAds.length > 0) {
+      return res.json(nearbyAds[0]);
     }
 
-    res.json(ads[0]);
+    const allAds = await Ad.find();
+    if (allAds.length === 0) {
+      return res.status(404).json({ error: "No ads in the system" });
+    }
+
+    const randomAd = allAds[Math.floor(Math.random() * allAds.length)];
+    return res.json(randomAd);
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
