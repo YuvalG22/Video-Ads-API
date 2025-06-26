@@ -74,14 +74,25 @@ router.get("/by-location", async (req, res) => {
   }
 
   try {
-    const ads = await Ad.find();
-    if (ads.length === 0) return res.status(404).json({ error: "No ads available" });
+    const ads = await Ad.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          $maxDistance: 50000
+        }
+      }
+    });
 
-    // TODO: filter by location if relevant
-    const selectedAd = ads[Math.floor(Math.random() * ads.length)];
+    if (ads.length === 0) {
+      return res.status(404).json({ error: "No ads found near your location" });
+    }
 
-    res.json(selectedAd);
+    res.json(ads[0]);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
