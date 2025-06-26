@@ -65,4 +65,26 @@ router.post('/:id/click', async (req, res) => {
   }
 });
 
+// Get ad by location
+router.get("/by-location", async (req, res) => {
+  const { lat, lng } = req.query;
+
+  if (!lat || !lng) {
+    return res.status(400).json({ error: "Missing lat/lng parameters" });
+  }
+
+  try {
+    const ads = await Ad.find();
+    if (ads.length === 0) return res.status(404).json({ error: "No ads available" });
+
+    // TODO: filter by location if relevant
+    const selectedAd = ads[Math.floor(Math.random() * ads.length)];
+
+    res.json(selectedAd);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 export default router;

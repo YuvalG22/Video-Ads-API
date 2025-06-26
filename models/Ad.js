@@ -10,7 +10,20 @@ const adSchema = new mongoose.Schema({
   clicks: { type: Number, default: 0 },
   clickTimestamps: {type: [Date], default: []},
   createdAt: { type: Date, default: Date.now },
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+      default: "Point"
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
+  }
 });
 
+AdSchema.index({ location: "2dsphere" });
 const Ad = mongoose.model("Ad", adSchema);
 export default Ad;
