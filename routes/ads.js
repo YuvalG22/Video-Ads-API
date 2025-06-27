@@ -121,6 +121,7 @@ router.post('/:id/view', async (req, res) => {
 //Ad click
 router.post('/:id/click', async (req, res) => {
   try {
+    const now = new Date().toISOString();
     await Ad.findByIdAndUpdate(req.params.id, { $inc: { clicks: 1 }, $push: { clicksTimestamps: now } });
     res.sendStatus(200);
   } catch (err) {
