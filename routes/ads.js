@@ -98,6 +98,18 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Update an ad by ID
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedAd = await Ad.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedAd) return res.status(404).json({ error: 'Ad not found' });
+    res.json(updatedAd);
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
 //Delete ad
 router.delete('/:id', async (req, res) => {
   try {
