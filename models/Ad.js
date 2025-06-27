@@ -10,6 +10,7 @@ const adSchema = new mongoose.Schema({
   clicks: { type: Number, default: 0 },
   clickTimestamps: { type: [Date], default: [] },
   createdAt: { type: Date, default: Date.now },
+  city: String,
   location: {
     type: {
       type: String,
@@ -17,7 +18,7 @@ const adSchema = new mongoose.Schema({
       required: true,
     },
     coordinates: {
-      type: [Number], // [lng, lat]
+      type: [Number],
       required: true,
     },
   },

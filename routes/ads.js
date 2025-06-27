@@ -3,6 +3,19 @@ import Ad from "../models/Ad.js";
 
 const router = express.Router();
 
+const cityToCoordinates = {
+  "Tel Aviv": [34.7818, 32.0853],
+  "Jerusalem": [35.2137, 31.7683],
+  "Haifa": [34.9896, 32.7940],
+  "Beer Sheva": [34.7913, 31.2518],
+  "Netanya": [34.8555, 32.3215],
+  "Rishon LeZion": [34.7894, 31.9730],
+  "Eilat": [34.9500, 29.5581],
+  "Tiberias": [35.5283, 32.7922],
+  "Herzliya": [34.8409, 32.1663],
+  "Ashdod": [34.6405, 31.8014],
+};
+
 //Get all ads
 router.get("/", async (req, res) => {
   try {
@@ -66,10 +79,21 @@ router.get("/:id", async (req, res) => {
 //Create new ad
 router.post("/", async (req, res) => {
   try {
-    const ad = new Ad(req.body);
+    const adData = { ...req.body };
+
+    if (!adData.location && adData.city && cityToCoordinates[adData.city]) {
+      const [lng, lat] = cityToCoordinates[adData.city];
+      adData.location = {
+        type: "Point",
+        coordinates: [lng, lat],
+      };
+    }
+
+    const ad = new Ad(adData);
     const savedAd = await ad.save();
     res.status(201).json(savedAd);
   } catch (err) {
+    console.error("❌ Error creating ad:", err);
     res.status(400).json({ error: "Invalid data" });
   }
 });
