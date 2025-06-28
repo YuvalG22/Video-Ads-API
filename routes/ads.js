@@ -14,7 +14,7 @@ const cityToCoordinates = {
   "Tiberias": [35.5283, 32.7922],
   "Herzliya": [34.8409, 32.1663],
   "Ashdod": [34.6405, 31.8014],
-  "Current": [34.5593, 30.4955],
+  "Current": [30.4955, 34.5593],
 };
 
 //Get all ads
