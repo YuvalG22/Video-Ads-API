@@ -4,6 +4,7 @@ const adSchema = new mongoose.Schema({
   title: String,
   videoUrl: String,
   advertiser: String,
+  advertiserLink: String,
   category: String,
   duration: Number,
   impressions: { type: Number, default: 0 },
